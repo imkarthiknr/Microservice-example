@@ -1,0 +1,17 @@
+<div>
+  <div>
+    <h2>Registration Page</h2>
+        <a routerLink="/AddUpdate"><button >Add</button></a>
+        <a routerLink="/GetDelete"><button >Retrieve</button></a>
+        <a routerLink="/GetDelete"><button >Delete</button></a>
+        <a routerLink="/AddUpdate"><button>Update</button></a>
+    
+  </div>
+</div>
+<div>
+    <h2>Get & Delete</h2>
+    <input name = "id" type = "number" [(ngModel)] = "id">
+    <button (click) = "get()">Get</button>
+    <button (click) = "delete()">Delete</button>
+    <h3>{{ res }}</h3>
+  </div>
