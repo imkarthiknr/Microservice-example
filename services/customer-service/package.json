@@ -1,0 +1,23 @@
+{
+  "name": "customer-service",
+  "version": "1.0.0",
+  "description": "Customer microservice: CRUD REST API over SQLite.",
+  "private": true,
+  "type": "module",
+  "main": "src/server.js",
+  "engines": {
+    "node": "^22.13.0 || >=24.0.0"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning src/server.js",
+    "dev": "node --disable-warning=ExperimentalWarning --watch src/server.js",
+    "test": "node --disable-warning=ExperimentalWarning --test \"test/**/*.test.js\""
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "supertest": "^7.1.0"
+  },
+  "license": "MIT"
+}
