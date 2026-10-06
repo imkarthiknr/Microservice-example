@@ -1,0 +1,25 @@
+# Full stack: browser → web (nginx + Angular) → customer-service (Express) → SQLite volume
+services:
+  customer-service:
+    build: ./services/customer-service
+    environment:
+      PORT: 6102
+      DATABASE_PATH: /data/customers.db
+      SEED_DEMO_DATA: 'true'
+    volumes:
+      - customer-data:/data
+    expose:
+      - '6102'
+    restart: unless-stopped
+
+  web:
+    build: ./frontend
+    ports:
+      - '8080:80'
+    depends_on:
+      customer-service:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  customer-data:
