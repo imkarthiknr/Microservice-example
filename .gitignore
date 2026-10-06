@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output & caches
+dist/
+.angular/
+coverage/
+out-tsc/
+
+# Local data (SQLite)
+data/
+*.db
+*.db-shm
+*.db-wal
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
