@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  customer-service:
+    name: customer-service (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [22, 24]
+    defaults:
+      run:
+        working-directory: services/customer-service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: services/customer-service/package-lock.json
+      - run: npm ci
+      - run: npm test
+
+  frontend:
+    name: frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm test
+      - run: npm run build
+
+  docker:
+    name: docker compose smoke test
+    runs-on: ubuntu-latest
+    needs: [customer-service, frontend]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and start the stack
+        run: docker compose up --build --detach --wait --wait-timeout 120
+      - name: SPA is served
+        run: curl --fail --silent http://localhost:8080/customers | grep -q '<app-root>'
+      - name: API is reachable through nginx
+        run: |
+          curl --fail --silent http://localhost:8080/api/customers | tee /tmp/list.json
+          grep -q 'ada@example.com' /tmp/list.json
+      - name: Create, update and delete a customer
+        run: |
+          set -euo pipefail
+          id=$(curl --fail -s -X POST http://localhost:8080/api/customers \
+                 -H 'Content-Type: application/json' \
+                 -d '{"name":"CI Bot","email":"ci@example.com","password":"pipeline1"}' | jq .id)
+          curl --fail -s -X PUT "http://localhost:8080/api/customers/$id" \
+               -H 'Content-Type: application/json' \
+               -d '{"name":"CI Bot 2","email":"ci@example.com"}' | jq -e '.name == "CI Bot 2"'
+          curl --fail -s -o /dev/null -w '%{http_code}' -X DELETE "http://localhost:8080/api/customers/$id" | grep -q 204
+      - name: Data survives a service restart
+        run: |
+          docker compose restart customer-service
+          docker compose up --wait --wait-timeout 60
+          curl --fail -s http://localhost:8080/api/customers/1 | jq -e '.email == "ada@example.com"'
+      - name: Logs on failure
+        if: failure()
+        run: docker compose logs
+      - name: Tear down
+        if: always()
+        run: docker compose down --volumes
