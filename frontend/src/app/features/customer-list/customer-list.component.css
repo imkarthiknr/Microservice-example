@@ -1,0 +1,73 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.toolbar h2 {
+  margin: 0;
+}
+
+.table-wrap {
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  transition: opacity 0.15s;
+}
+
+table.stale {
+  opacity: 0.6;
+}
+
+th,
+td {
+  padding: 0.6rem 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.email {
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.actions > * + * {
+  margin-left: 0.75rem;
+}
+
+.confirm .link {
+  margin-left: 0.5rem;
+}
+
+.empty {
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 560px) {
+  .hide-sm {
+    display: none;
+  }
+}

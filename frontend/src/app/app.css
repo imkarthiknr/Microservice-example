@@ -1,0 +1,43 @@
+:host {
+  display: block;
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+.site-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.brand-mark {
+  color: var(--accent);
+  margin-right: 0.25rem;
+}
+
+.tag {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--success);
+  border-radius: 8px;
+  background: var(--surface);
+}

@@ -1,0 +1,18 @@
+<header class="site-header">
+  <a routerLink="/customers" class="brand">
+    <span class="brand-mark" aria-hidden="true">◆</span>
+    Customer Console
+  </a>
+  <span class="muted tag">customer-service</span>
+</header>
+
+@if (notify.message(); as message) {
+  <div class="toast" role="status">
+    <span>{{ message }}</span>
+    <button type="button" class="link" aria-label="Dismiss" (click)="notify.dismiss()">✕</button>
+  </div>
+}
+
+<main>
+  <router-outlet />
+</main>
